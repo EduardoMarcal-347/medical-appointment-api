@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  my-postgres:
+    image: postgres:latest
+    container_name: my-postgres
+    ports:
+      - "5444:5432"
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
