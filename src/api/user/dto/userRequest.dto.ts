@@ -9,13 +9,13 @@ import {
 export class UserRequestDto {
   @MaxLength(11, { message: 'Cpf inválido' })
   @IsNumber()
-  cpf!: number;
+  cpf!: string;
 
   @IsString()
   name!: string;
 
   @IsDate()
-  birthDate!: Date;
+  birthdate!: Date;
 
   // TODO: create healthInsurance enum
   healthInsurance?: string;
