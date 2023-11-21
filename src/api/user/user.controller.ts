@@ -13,7 +13,7 @@ export class UserController {
   }
 
   @Get()
-  async findAll(): Promise<string[]> {
-    return ['should', 'return', 'all'];
+  async findAll(): Promise<UserViewDto[]> {
+    return this.userService.findAll();
   }
 }
