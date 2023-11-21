@@ -1,12 +1,4 @@
-import {
-  IsDate,
-  IsEmail,
-  IsEnum,
-  IsNumber,
-  IsString,
-  Length,
-  MaxLength,
-} from 'class-validator';
+import { IsDate, IsEmail, IsEnum, IsString, Length } from 'class-validator';
 import { HealthInsurance } from 'src/enums/healthInsurance.enum';
 
 export class UserRequestDto {
