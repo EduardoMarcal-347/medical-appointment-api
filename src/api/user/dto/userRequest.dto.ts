@@ -1,14 +1,17 @@
 import {
   IsDate,
   IsEmail,
+  IsEnum,
   IsNumber,
   IsString,
+  Length,
   MaxLength,
 } from 'class-validator';
+import { HealthInsurance } from 'src/enums/healthInsurance.enum';
 
 export class UserRequestDto {
-  @MaxLength(11, { message: 'Cpf inválido' })
-  @IsNumber()
+  @Length(11)
+  @IsString()
   cpf!: string;
 
   @IsString()
@@ -17,8 +20,8 @@ export class UserRequestDto {
   @IsDate()
   birthdate!: Date;
 
-  // TODO: create healthInsurance enum
-  healthInsurance?: string;
+  @IsEnum(HealthInsurance, { message: 'invalid health insurance' })
+  healthInsurance?: HealthInsurance;
 
   @IsEmail()
   @IsString()

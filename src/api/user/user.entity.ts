@@ -40,7 +40,7 @@ export class UserEntity {
     nullable: true,
     comment: 'Health Insurance',
   })
-  healthInsurance: string;
+  healthInsurance: HealthInsurance;
 
   @Column({
     type: 'varchar',
