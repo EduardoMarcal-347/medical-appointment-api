@@ -3,26 +3,26 @@ import { UserService } from './user.service';
 import { UserRequestDto } from './dto/userRequest.dto';
 import { UserViewDto } from './dto/userView.dto';
 import { UserUpdateDto } from './dto/userUpdate.dto';
-import { ApiOkPaginated } from 'src/swagger/apiOkPaginated';
+import { ApiOkResponsePaginated } from 'src/swagger/apiOkResponsePaginated';
 
 @Controller('api/v1/user')
 export class UserController {
   constructor(private userService: UserService) {}
 
   @Post()
-  @ApiOkPaginated(UserViewDto)
+  @ApiOkResponsePaginated(UserViewDto)
   async save(@Body() reqBody: UserRequestDto): Promise<UserViewDto> {
     return this.userService.create(reqBody);
   }
 
   @Get()
-  @ApiOkPaginated(UserViewDto)
+  @ApiOkResponsePaginated(UserViewDto)
   async findAll(): Promise<UserViewDto[]> {
     return this.userService.findAll();
   }
 
   @Put(':id')
-  @ApiOkPaginated(UserViewDto)
+  @ApiOkResponsePaginated(UserViewDto)
   async updateOne(
     @Param('id') reqId: number,
     @Body() reqBody: UserUpdateDto,
