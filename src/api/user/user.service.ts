@@ -18,6 +18,11 @@ export class UserService {
     return new UserViewDto(await this.userRepository.save(userEntity));
   }
 
+  async findById(reqId: number): Promise<UserViewDto> {
+    const user: UserEntity = await this.verifyUserExist(reqId);
+    return new UserViewDto(user);
+  }
+
   async findAll(): Promise<UserViewDto[]> {
     const users: UserEntity[] = await this.userRepository.find();
     return users.map((user) => new UserViewDto(user));
