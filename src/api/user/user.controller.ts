@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserRequestDto } from './dto/userRequest.dto';
 import { UserViewDto } from './dto/userView.dto';
 import { UserUpdateDto } from './dto/userUpdate.dto';
 import { ApiOkResponsePaginated } from 'src/swagger/apiOkResponsePaginated';
+import { DeleteQueryBuilder, DeleteResult } from 'typeorm';
 
 @Controller('api/v1/user')
 export class UserController {
@@ -28,5 +29,10 @@ export class UserController {
     @Body() reqBody: UserUpdateDto,
   ): Promise<UserViewDto> {
     return this.userService.updateOne(reqId, reqBody);
+  }
+
+  @Delete(':id')
+  async deleteOne(@Param('id') reqId: number): Promise<DeleteResult> {
+    return this.userService.deleteOne(reqId);
   }
 }
