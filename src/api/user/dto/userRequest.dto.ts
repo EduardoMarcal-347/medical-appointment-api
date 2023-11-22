@@ -21,7 +21,6 @@ export class UserRequestDto {
   healthInsurance?: HealthInsurance;
 
   @IsEmail()
-  @IsString()
   @ApiProperty()
   email!: string;
 
