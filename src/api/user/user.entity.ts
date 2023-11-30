@@ -11,7 +11,7 @@ export class UserEntity {
   id: number;
 
   @Column({
-    type: 'int',
+    type: 'varchar',
     name: 'cpf',
     unique: true,
     comment: 'CPF (Cadastro de Pessoa Física)',
