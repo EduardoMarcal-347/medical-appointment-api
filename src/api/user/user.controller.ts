@@ -38,15 +38,15 @@ export class UserController {
 
   @Put(':id')
   @ApiOkResponsePaginated(ViewUserDto)
-  async updateOne(
+  async update(
     @Param('id') reqId: number,
     @Body() reqBody: UpdateUserDto,
   ): Promise<ViewUserDto> {
-    return this.userService.updateOne(reqId, reqBody);
+    return this.userService.update(reqId, reqBody);
   }
 
   @Delete(':id')
-  async deleteOne(@Param('id') reqId: number): Promise<DeleteResult> {
-    return this.userService.deleteOne(reqId);
+  async delete(@Param('id') reqId: number): Promise<DeleteResult> {
+    return this.userService.delete(reqId);
   }
 }

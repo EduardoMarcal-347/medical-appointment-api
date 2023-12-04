@@ -19,7 +19,7 @@ export class DoctorController {
   constructor(private doctorService: DoctorService) {}
   @Post()
   @ApiOkResponsePaginated(ViewDoctorDto)
-  async save(@Body() reqBody: CreateDoctorDto): Promise<ViewDoctorDto> {
+  async create(@Body() reqBody: CreateDoctorDto): Promise<ViewDoctorDto> {
     return this.doctorService.create(reqBody);
   }
 
@@ -37,15 +37,15 @@ export class DoctorController {
 
   @Put(':id')
   @ApiOkResponsePaginated(ViewDoctorDto)
-  async updateOne(
+  async update(
     @Param('id') reqId: number,
     @Body() reqBody: UpdateDoctorDto,
   ): Promise<ViewDoctorDto> {
-    return this.doctorService.updateOne(reqId, reqBody);
+    return this.doctorService.update(reqId, reqBody);
   }
 
   @Delete(':id')
-  async deleteOne(@Param('id') reqId: number): Promise<DeleteResult> {
-    return this.doctorService.deleteOne(reqId);
+  async delete(@Param('id') reqId: number): Promise<DeleteResult> {
+    return this.doctorService.delete(reqId);
   }
 }

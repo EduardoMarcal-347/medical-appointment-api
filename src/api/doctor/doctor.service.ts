@@ -30,7 +30,7 @@ export class DoctorService {
     return doctors.map((doctor) => new ViewDoctorDto(doctor));
   }
 
-  async updateOne(
+  async update(
     reqId: number,
     reqBody: UpdateDoctorDto,
   ): Promise<ViewDoctorDto> {
@@ -39,7 +39,7 @@ export class DoctorService {
     return new ViewDoctorDto(doctor);
   }
 
-  async deleteOne(reqId: number): Promise<DeleteResult> {
+  async delete(reqId: number): Promise<DeleteResult> {
     const doctor: DoctorEntity = await this.verifyUserExist(reqId);
     return this.doctorRepository.delete({ ...doctor });
   }

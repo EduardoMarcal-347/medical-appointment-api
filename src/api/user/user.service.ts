@@ -28,13 +28,13 @@ export class UserService {
     return users.map((user) => new ViewUserDto(user));
   }
 
-  async updateOne(reqId: number, reqBody: UpdateUserDto): Promise<ViewUserDto> {
+  async update(reqId: number, reqBody: UpdateUserDto): Promise<ViewUserDto> {
     const user: UserEntity = await this.verifyUserExist(reqId);
     this.userRepository.save(Object.assign(user, reqBody));
     return new ViewUserDto(user);
   }
 
-  async deleteOne(reqId: number): Promise<DeleteResult> {
+  async delete(reqId: number): Promise<DeleteResult> {
     const user: UserEntity = await this.verifyUserExist(reqId);
     return this.userRepository.delete({ ...user });
   }
