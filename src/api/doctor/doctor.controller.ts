@@ -16,7 +16,7 @@ import { DoctorService } from './doctor.service';
 
 @Controller('api/v1/doctor')
 export class DoctorController {
-  constructor(private doctorService: DoctorService) {}
+  constructor(private readonly doctorService: DoctorService) {}
   @Post()
   @ApiOkResponsePaginated(ViewDoctorDto)
   async create(@Body() reqBody: CreateDoctorDto): Promise<ViewDoctorDto> {
