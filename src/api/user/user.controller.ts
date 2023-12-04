@@ -20,7 +20,7 @@ export class UserController {
 
   @Post()
   @ApiOkResponsePaginated(ViewUserDto)
-  async save(@Body() reqBody: CreateUserDto): Promise<ViewUserDto> {
+  async create(@Body() reqBody: CreateUserDto): Promise<ViewUserDto> {
     return this.userService.create(reqBody);
   }
 
