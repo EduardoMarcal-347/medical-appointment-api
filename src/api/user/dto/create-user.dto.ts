@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDate, IsEmail, IsEnum, IsString, Length } from 'class-validator';
-import { HealthInsurance } from 'src/enums/healthInsurance.enum';
+import { HealthInsurance } from 'src/enums/health-insurance.enum';
 
 export class CreateUserDto {
   @Length(11)

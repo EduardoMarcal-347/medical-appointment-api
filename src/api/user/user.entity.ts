@@ -1,4 +1,4 @@
-import { HealthInsurance } from 'src/enums/healthInsurance.enum';
+import { HealthInsurance } from 'src/enums/health-insurance.enum';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

@@ -1,4 +1,4 @@
-import { DoctorSpecialty } from 'src/enums/doctorSpecialty.enum';
+import { DoctorSpecialty } from 'src/enums/doctor-specialty.enum';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Availability } from '../availability/availability.entity';
 
