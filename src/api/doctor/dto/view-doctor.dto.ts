@@ -1,8 +1,8 @@
 import { OmitType } from '@nestjs/swagger';
 import { DoctorEntity } from '../doctor.entity';
-import { DoctorRequestDto } from './doctorRequest.dto';
+import { CreateDoctorDto } from './create-doctor.dto';
 
-export class DoctorViewDto extends OmitType(DoctorRequestDto, [
+export class ViewDoctorDto extends OmitType(CreateDoctorDto, [
   'crm',
   'address',
 ]) {

@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserEntity } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserRequestDto } from './dto/userRequest.dto';
-import { UserViewDto } from './dto/userView.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { ViewUserDto } from './dto/view-user.dto';
 import { DeleteResult, Repository } from 'typeorm';
-import { UserUpdateDto } from './dto/userUpdate.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -13,25 +13,25 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async create(reqBody: UserRequestDto): Promise<UserViewDto> {
+  async create(reqBody: CreateUserDto): Promise<ViewUserDto> {
     const userEntity: UserEntity = this.userRepository.create({ ...reqBody });
-    return new UserViewDto(await this.userRepository.save(userEntity));
+    return new ViewUserDto(await this.userRepository.save(userEntity));
   }
 
-  async findById(reqId: number): Promise<UserViewDto> {
+  async findById(reqId: number): Promise<ViewUserDto> {
     const user: UserEntity = await this.verifyUserExist(reqId);
-    return new UserViewDto(user);
+    return new ViewUserDto(user);
   }
 
-  async findAll(): Promise<UserViewDto[]> {
+  async findAll(): Promise<ViewUserDto[]> {
     const users: UserEntity[] = await this.userRepository.find();
-    return users.map((user) => new UserViewDto(user));
+    return users.map((user) => new ViewUserDto(user));
   }
 
-  async updateOne(reqId: number, reqBody: UserUpdateDto): Promise<UserViewDto> {
+  async updateOne(reqId: number, reqBody: UpdateUserDto): Promise<ViewUserDto> {
     const user: UserEntity = await this.verifyUserExist(reqId);
     this.userRepository.save(Object.assign(user, reqBody));
-    return new UserViewDto(user);
+    return new ViewUserDto(user);
   }
 
   async deleteOne(reqId: number): Promise<DeleteResult> {

@@ -2,9 +2,9 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 import { DoctorEntity } from './doctor.entity';
-import { DoctorRequestDto } from './dto/doctorRequest.dto';
-import { DoctorViewDto } from './dto/doctorView.dto';
-import { DoctorUpdateDto } from './dto/doctorUpdate.dto';
+import { CreateDoctorDto } from './dto/create-doctor.dto';
+import { ViewDoctorDto } from './dto/view-doctor.dto';
+import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
 @Injectable()
 export class DoctorService {
@@ -13,30 +13,30 @@ export class DoctorService {
     private readonly doctorRepository: Repository<DoctorEntity>,
   ) {}
 
-  async create(reqBody: DoctorRequestDto): Promise<DoctorViewDto> {
+  async create(reqBody: CreateDoctorDto): Promise<ViewDoctorDto> {
     const doctorEntity: DoctorEntity = this.doctorRepository.create({
       ...reqBody,
     });
-    return new DoctorViewDto(await this.doctorRepository.save(doctorEntity));
+    return new ViewDoctorDto(await this.doctorRepository.save(doctorEntity));
   }
 
-  async findById(reqId: number): Promise<DoctorViewDto> {
+  async findById(reqId: number): Promise<ViewDoctorDto> {
     const doctor: DoctorEntity = await this.verifyUserExist(reqId);
-    return new DoctorViewDto(doctor);
+    return new ViewDoctorDto(doctor);
   }
 
-  async findAll(): Promise<DoctorViewDto[]> {
+  async findAll(): Promise<ViewDoctorDto[]> {
     const doctors: DoctorEntity[] = await this.doctorRepository.find();
-    return doctors.map((doctor) => new DoctorViewDto(doctor));
+    return doctors.map((doctor) => new ViewDoctorDto(doctor));
   }
 
   async updateOne(
     reqId: number,
-    reqBody: DoctorUpdateDto,
-  ): Promise<DoctorViewDto> {
+    reqBody: UpdateDoctorDto,
+  ): Promise<ViewDoctorDto> {
     const doctor: DoctorEntity = await this.verifyUserExist(reqId);
     this.doctorRepository.save(Object.assign(doctor, reqBody));
-    return new DoctorViewDto(doctor);
+    return new ViewDoctorDto(doctor);
   }
 
   async deleteOne(reqId: number): Promise<DeleteResult> {

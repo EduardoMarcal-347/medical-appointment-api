@@ -1,8 +1,8 @@
 import { OmitType } from '@nestjs/swagger';
-import { UserRequestDto } from './userRequest.dto';
+import { CreateUserDto } from './create-user.dto';
 import { UserEntity } from '../user.entity';
 
-export class UserViewDto extends OmitType(UserRequestDto, [
+export class ViewUserDto extends OmitType(CreateUserDto, [
   'cpf',
   'phoneNumber',
   'address',

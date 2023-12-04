@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsEnum, IsString, Length } from 'class-validator';
 import { DoctorSpecialty } from 'src/enums/doctorSpecialty.enum';
 
-export class DoctorRequestDto {
+export class CreateDoctorDto {
   @Length(13)
   @IsString()
   @ApiProperty()

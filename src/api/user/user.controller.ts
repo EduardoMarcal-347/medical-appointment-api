@@ -8,9 +8,9 @@ import {
   Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserRequestDto } from './dto/userRequest.dto';
-import { UserViewDto } from './dto/userView.dto';
-import { UserUpdateDto } from './dto/userUpdate.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { ViewUserDto } from './dto/view-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiOkResponsePaginated } from 'src/swagger/apiOkResponsePaginated';
 import { DeleteResult } from 'typeorm';
 
@@ -19,29 +19,29 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Post()
-  @ApiOkResponsePaginated(UserViewDto)
-  async save(@Body() reqBody: UserRequestDto): Promise<UserViewDto> {
+  @ApiOkResponsePaginated(ViewUserDto)
+  async save(@Body() reqBody: CreateUserDto): Promise<ViewUserDto> {
     return this.userService.create(reqBody);
   }
 
   @Get('id/:id')
-  @ApiOkResponsePaginated(UserViewDto)
-  async findById(@Param('id') reqId: number): Promise<UserViewDto> {
+  @ApiOkResponsePaginated(ViewUserDto)
+  async findById(@Param('id') reqId: number): Promise<ViewUserDto> {
     return this.userService.findById(reqId);
   }
 
   @Get()
-  @ApiOkResponsePaginated(UserViewDto)
-  async findAll(): Promise<UserViewDto[]> {
+  @ApiOkResponsePaginated(ViewUserDto)
+  async findAll(): Promise<ViewUserDto[]> {
     return this.userService.findAll();
   }
 
   @Put(':id')
-  @ApiOkResponsePaginated(UserViewDto)
+  @ApiOkResponsePaginated(ViewUserDto)
   async updateOne(
     @Param('id') reqId: number,
-    @Body() reqBody: UserUpdateDto,
-  ): Promise<UserViewDto> {
+    @Body() reqBody: UpdateUserDto,
+  ): Promise<ViewUserDto> {
     return this.userService.updateOne(reqId, reqBody);
   }
 
