@@ -3,20 +3,23 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { AvailabilityService } from './availability.service';
 import { CreateAvailabilityDto } from './dto/create-availability.dto';
 import { UpdateAvailabilityDto } from './dto/update-availability.dto';
 import { ViewAvailabilityDto } from './dto/view-availability.dto';
+import { ApiOkResponsePaginated } from 'src/swagger/apiOkResponsePaginated';
+import { DeleteResult } from 'typeorm';
 
 @Controller('api/v1/availability')
 export class AvailabilityController {
   constructor(private readonly availabilityService: AvailabilityService) {}
 
   @Post()
+  @ApiOkResponsePaginated(ViewAvailabilityDto)
   async create(
     @Body() createAvailabilityDto: CreateAvailabilityDto,
   ): Promise<ViewAvailabilityDto> {
@@ -24,6 +27,7 @@ export class AvailabilityController {
   }
 
   @Get(':id')
+  @ApiOkResponsePaginated(ViewAvailabilityDto)
   async findAllByDoctor(
     @Param('id') reqId: number,
   ): Promise<ViewAvailabilityDto[]> {
@@ -31,11 +35,13 @@ export class AvailabilityController {
   }
 
   @Get(':id')
+  @ApiOkResponsePaginated(ViewAvailabilityDto)
   async findById(@Param('id') reqId: number): Promise<ViewAvailabilityDto> {
     return this.availabilityService.findById(+reqId);
   }
 
-  @Patch(':id')
+  @Put(':id')
+  @ApiOkResponsePaginated(ViewAvailabilityDto)
   async update(
     @Param('id') reqId: number,
     @Body() updateAvailabilityDto: UpdateAvailabilityDto,
@@ -44,7 +50,7 @@ export class AvailabilityController {
   }
 
   @Delete(':id')
-  async delete(@Param('id') reqId: number) {
+  async delete(@Param('id') reqId: number): Promise<DeleteResult> {
     return this.availabilityService.delete(+reqId);
   }
 }
