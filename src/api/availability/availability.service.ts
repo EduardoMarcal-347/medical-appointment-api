@@ -4,7 +4,7 @@ import { UpdateAvailabilityDto } from './dto/update-availability.dto';
 import { AvailabilityEntity } from './availability.entity';
 import { ViewAvailabilityDto } from './dto/view-availability.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { DoctorEntity } from '../doctor/doctor.entity';
 
 @Injectable()
@@ -54,8 +54,8 @@ export class AvailabilityService {
     );
   }
 
-  async delete(reqId: number) {
-    this.availabilityRepository.delete({
+  async delete(reqId: number): Promise<DeleteResult> {
+    return this.availabilityRepository.delete({
       ...(await this.verifyAvailabilityExist(reqId)),
     });
   }
