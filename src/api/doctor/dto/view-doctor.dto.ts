@@ -9,6 +9,7 @@ export class ViewDoctorDto extends OmitType(CreateDoctorDto, [
   constructor(entity: DoctorEntity) {
     super();
     this.name = entity.name;
+    this.birthdate = entity.birthdate;
     this.email = entity.email;
     this.specialty = entity.specialty;
   }

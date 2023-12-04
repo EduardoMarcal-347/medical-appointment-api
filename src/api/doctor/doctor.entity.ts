@@ -28,6 +28,13 @@ export class DoctorEntity {
   name: string;
 
   @Column({
+    type: 'date',
+    name: 'birthdate',
+    comment: 'Birthdate',
+  })
+  birthdate: Date;
+
+  @Column({
     type: 'varchar',
     length: 255,
     name: 'email',
