@@ -21,7 +21,7 @@ export class DoctorService {
   }
 
   async findById(reqId: number): Promise<ViewDoctorDto> {
-    const doctor: DoctorEntity = await this.verifyUserExist(reqId);
+    const doctor: DoctorEntity = await this.verifyDoctorExist(reqId);
     return new ViewDoctorDto(doctor);
   }
 
@@ -34,17 +34,17 @@ export class DoctorService {
     reqId: number,
     reqBody: UpdateDoctorDto,
   ): Promise<ViewDoctorDto> {
-    const doctor: DoctorEntity = await this.verifyUserExist(reqId);
+    const doctor: DoctorEntity = await this.verifyDoctorExist(reqId);
     this.doctorRepository.save(Object.assign(doctor, reqBody));
     return new ViewDoctorDto(doctor);
   }
 
   async delete(reqId: number): Promise<DeleteResult> {
-    const doctor: DoctorEntity = await this.verifyUserExist(reqId);
+    const doctor: DoctorEntity = await this.verifyDoctorExist(reqId);
     return this.doctorRepository.delete({ ...doctor });
   }
 
-  async verifyUserExist(reqId: number): Promise<DoctorEntity> {
+  async verifyDoctorExist(reqId: number): Promise<DoctorEntity> {
     const doctor: DoctorEntity | null = await this.doctorRepository.findOneBy({
       id: reqId,
     });
