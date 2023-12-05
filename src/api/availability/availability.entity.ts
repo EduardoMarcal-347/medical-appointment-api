@@ -18,7 +18,7 @@ export class AvailabilityEntity {
   id: number;
 
   @Column({
-    type: 'int',
+    type: 'enum',
     enum: DayOfWeek,
     name: 'day_of_week',
     comment: 'Day of week',
@@ -26,14 +26,14 @@ export class AvailabilityEntity {
   dayOfWeek: DayOfWeek;
 
   @Column({
-    type: 'date',
+    type: 'time',
     name: 'start_time',
     comment: 'Business Start Time ',
   })
   startTime: Date;
 
   @Column({
-    type: 'date',
+    type: 'time',
     name: 'end_time',
     comment: 'Business End Time ',
   })
@@ -42,4 +42,11 @@ export class AvailabilityEntity {
   @ManyToOne(() => DoctorEntity, (doctor) => doctor.availabilitySchedules)
   @JoinColumn({ name: 'doctor_id' })
   doctor: DoctorEntity;
+
+  @Column({
+    type: 'int',
+    name: 'doctor_id',
+    comment: 'FK Doctor ID',
+  })
+  doctorId: number;
 }
