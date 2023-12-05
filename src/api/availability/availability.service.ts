@@ -17,7 +17,8 @@ export class AvailabilityService {
   ) {}
 
   async create(reqBody: CreateAvailabilityDto): Promise<ViewAvailabilityDto> {
-    this.verifyDoctorExist(reqBody.doctorId);
+    if (!(await this.verifyDoctorExist(reqBody.doctorId)))
+      throw new HttpException('Doctor does not exist', HttpStatus.BAD_REQUEST);
     const availabilityEntity: AvailabilityEntity =
       this.availabilityRepository.create({
         ...reqBody,
@@ -28,10 +29,11 @@ export class AvailabilityService {
   }
 
   async findAllByDoctor(reqId: number): Promise<ViewAvailabilityDto[]> {
-    this.verifyDoctorExist(reqId);
+    if (!(await this.verifyDoctorExist(reqId)))
+      throw new HttpException('Doctor does not exist', HttpStatus.NOT_FOUND);
     const availabilities: AvailabilityEntity[] =
       await this.availabilityRepository.find({
-        where: { doctor: { id: reqId } },
+        where: { doctorId: reqId },
       });
     return availabilities.map(
       (availability) => new ViewAvailabilityDto(availability),
@@ -39,8 +41,12 @@ export class AvailabilityService {
   }
 
   async findById(reqId: number): Promise<ViewAvailabilityDto> {
-    const availability: AvailabilityEntity =
-      await this.availabilityRepository.findOneBy({ id: reqId });
+    const availability = await this.verifyAvailabilityExist(reqId);
+    if (!availability)
+      throw new HttpException(
+        'Availability does not exist',
+        HttpStatus.NOT_FOUND,
+      );
     return new ViewAvailabilityDto(availability);
   }
 
@@ -48,15 +54,28 @@ export class AvailabilityService {
     reqId: number,
     reqBody: UpdateAvailabilityDto,
   ): Promise<ViewAvailabilityDto> {
-    this.verifyDoctorExist(reqBody.doctorId);
+    const availability = await this.verifyAvailabilityExist(reqId);
+    if (!availability)
+      throw new HttpException(
+        'Availability does not exist',
+        HttpStatus.NOT_FOUND,
+      );
+    if (!(await this.verifyDoctorExist(reqBody.doctorId)))
+      throw new HttpException('Doctor does not exist', HttpStatus.BAD_REQUEST);
     return this.availabilityRepository.save(
-      Object.assign(await this.verifyAvailabilityExist(reqId), reqBody),
+      Object.assign(availability, reqBody),
     );
   }
 
   async delete(reqId: number): Promise<DeleteResult> {
+    const availability = await this.verifyAvailabilityExist(reqId);
+    if (!availability)
+      throw new HttpException(
+        'Availability does not exist',
+        HttpStatus.NOT_FOUND,
+      );
     return this.availabilityRepository.delete({
-      ...(await this.verifyAvailabilityExist(reqId)),
+      ...availability,
     });
   }
 
@@ -64,18 +83,12 @@ export class AvailabilityService {
     const availability = await this.availabilityRepository.findOneBy({
       id: reqId,
     });
-    if (!availability)
-      throw new HttpException('Doctor does not exist', HttpStatus.NOT_FOUND);
     return availability;
   }
 
   async verifyDoctorExist(reqId: number): Promise<boolean> {
-    if (
-      !(await this.doctorRepository.findOneBy({
-        id: reqId,
-      }))
-    )
-      throw new HttpException('Doctor does not exist', HttpStatus.NOT_FOUND);
-    return true;
+    return !!(await this.doctorRepository.findOneBy({
+      id: reqId,
+    }));
   }
 }
