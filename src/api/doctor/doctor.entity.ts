@@ -14,6 +14,7 @@ export class DoctorEntity {
   @Column({
     type: 'varchar',
     name: 'crm',
+    length: 13,
     unique: true,
     comment: 'CRM (Conselho Regional de Medicina)',
   })
@@ -35,6 +36,15 @@ export class DoctorEntity {
   birthdate: Date;
 
   @Column({
+    type: 'enum',
+    enum: DoctorSpecialty,
+    name: 'specialty',
+    nullable: true,
+    comment: 'Doctor Specialty',
+  })
+  specialty: DoctorSpecialty;
+
+  @Column({
     type: 'varchar',
     length: 255,
     name: 'email',
@@ -44,13 +54,13 @@ export class DoctorEntity {
   email: string;
 
   @Column({
-    type: 'enum',
-    enum: DoctorSpecialty,
-    name: 'specialty',
-    nullable: true,
-    comment: 'Doctor Specialty',
+    type: 'varchar',
+    length: 20,
+    name: 'phone_number',
+    unique: true,
+    comment: 'Doctor phone number',
   })
-  specialty: DoctorSpecialty;
+  phoneNumber: string;
 
   @Column({
     type: 'varchar',

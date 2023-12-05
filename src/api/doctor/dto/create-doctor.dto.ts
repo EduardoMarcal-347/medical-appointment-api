@@ -16,13 +16,17 @@ export class CreateDoctorDto {
   @ApiProperty()
   birthdate!: Date;
 
+  @IsEnum(DoctorSpecialty, { message: 'invalid doctor specialty' })
+  @ApiProperty()
+  specialty!: DoctorSpecialty;
+
   @IsEmail()
   @ApiProperty()
   email!: string;
 
-  @IsEnum(DoctorSpecialty, { message: 'invalid doctor specialty' })
+  @IsString()
   @ApiProperty()
-  specialty!: DoctorSpecialty;
+  phoneNumber!: string;
 
   @IsString()
   @ApiProperty()
