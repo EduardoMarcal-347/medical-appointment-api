@@ -1,5 +1,6 @@
 import { HealthInsurance } from 'src/enums/health-insurance.enum';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { AppointmentEntity } from '../appointment/appointment.entity';
 
 @Entity()
 export class UserEntity {
@@ -67,4 +68,7 @@ export class UserEntity {
     comment: 'User address',
   })
   address: string;
+
+  @OneToMany(() => AppointmentEntity, (appoitment) => appoitment.patient)
+  appointments: AppointmentEntity[];
 }

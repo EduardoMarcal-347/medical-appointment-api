@@ -1,6 +1,7 @@
 import { DoctorSpecialty } from 'src/enums/doctor-specialty.enum';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { AvailabilityEntity } from '../availability/availability.entity';
+import { AppointmentEntity } from '../appointment/appointment.entity';
 
 @Entity()
 export class DoctorEntity {
@@ -76,4 +77,7 @@ export class DoctorEntity {
     { eager: true },
   )
   availabilitySchedules: AvailabilityEntity[];
+
+  @OneToMany(() => AppointmentEntity, (appoitment) => appoitment.doctor)
+  appointments: AppointmentEntity[];
 }
