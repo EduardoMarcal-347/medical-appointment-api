@@ -26,7 +26,7 @@ export class AppointmentEntity {
   consultationDate: Date;
 
   @Column({
-    type: 'int',
+    type: 'float',
     name: 'price',
     precision: 2,
     comment: 'Appointment price',
@@ -42,7 +42,7 @@ export class AppointmentEntity {
   status: AppointmentStatus;
 
   @Column({
-    type: 'string',
+    type: 'varchar',
     length: 1000,
     name: 'medical_notes',
     comment: 'final medical notes',

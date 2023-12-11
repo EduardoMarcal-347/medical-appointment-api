@@ -72,7 +72,7 @@ export class DoctorEntity {
   address: string;
 
   @Column({
-    type: 'number',
+    type: 'float',
     name: 'appointment_price',
     precision: 2,
     comment: 'Appointment price charged by doctor',
