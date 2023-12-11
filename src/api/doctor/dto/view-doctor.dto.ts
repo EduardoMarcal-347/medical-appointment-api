@@ -11,5 +11,6 @@ export class ViewDoctorDto extends OmitType(CreateDoctorDto, ['crm']) {
     this.specialty = entity.specialty;
     this.phoneNumber = entity.phoneNumber;
     this.address = entity.address;
+    this.appointmentPrice = entity.appointmentPrice;
   }
 }

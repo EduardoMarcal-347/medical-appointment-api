@@ -1,5 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsEmail, IsEnum, IsString, Length } from 'class-validator';
+import {
+  IsDate,
+  IsEmail,
+  IsEnum,
+  IsNumber,
+  IsString,
+  Length,
+  Min,
+} from 'class-validator';
 import { DoctorSpecialty } from 'src/enums/doctor-specialty.enum';
 
 export class CreateDoctorDto {
@@ -31,4 +39,9 @@ export class CreateDoctorDto {
   @IsString()
   @ApiProperty()
   address!: string;
+
+  @IsNumber()
+  @Min(0)
+  @ApiProperty()
+  appointmentPrice!: number;
 }

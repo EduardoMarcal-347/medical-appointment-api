@@ -71,6 +71,14 @@ export class DoctorEntity {
   })
   address: string;
 
+  @Column({
+    type: 'number',
+    name: 'appointment_price',
+    precision: 2,
+    comment: 'Appointment price charged by doctor',
+  })
+  appointmentPrice: number;
+
   @OneToMany(
     () => AvailabilityEntity,
     (availabilitySchedules) => availabilitySchedules.doctor,
