@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
 import { DoctorEntity } from '../doctor/doctor.entity';
+import { AppointmentStatus } from 'src/enums/appointment-status.enum';
 
 @Entity()
 export class AppointmentEntity {
@@ -27,9 +28,26 @@ export class AppointmentEntity {
   @Column({
     type: 'int',
     name: 'price',
+    precision: 2,
     comment: 'Appointment price',
   })
   price: number;
+
+  @Column({
+    type: 'enum',
+    enum: AppointmentStatus,
+    name: 'status',
+    comment: 'Appointment status',
+  })
+  status: AppointmentStatus;
+
+  @Column({
+    type: 'string',
+    length: 1000,
+    name: 'medical_notes',
+    comment: 'final medical notes',
+  })
+  medicalNotes: string;
 
   @Column({
     type: 'int',
@@ -48,10 +66,8 @@ export class AppointmentEntity {
   @ManyToOne(() => UserEntity, (user) => user.appointments)
   @JoinColumn({ name: 'patient_id' })
   patient: UserEntity;
-  
+
   @ManyToOne(() => DoctorEntity, (doctor) => doctor.appointments)
   @JoinColumn({ name: 'doctor_id' })
   doctor: DoctorEntity;
-
-
 }
