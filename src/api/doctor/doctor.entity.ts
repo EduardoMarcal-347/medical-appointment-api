@@ -74,7 +74,6 @@ export class DoctorEntity {
   @Column({
     type: 'float',
     name: 'appointment_price',
-    precision: 2,
     comment: 'Appointment price charged by doctor',
   })
   appointmentPrice: number;
