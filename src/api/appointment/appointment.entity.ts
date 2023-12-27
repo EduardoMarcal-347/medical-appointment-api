@@ -19,7 +19,7 @@ export class AppointmentEntity {
   id: number;
 
   @Column({
-    type: 'date',
+    type: 'timestamp with time zone',
     name: 'consultation_date',
     comment: 'Consultation date',
   })
@@ -45,6 +45,7 @@ export class AppointmentEntity {
     length: 1000,
     name: 'medical_notes',
     comment: 'final medical notes',
+    nullable: true,
   })
   medicalNotes: string;
 
