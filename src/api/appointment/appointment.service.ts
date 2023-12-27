@@ -7,6 +7,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AppointmentStatus } from 'src/enums/appointment-status.enum';
 import { DoctorEntity } from '../doctor/doctor.entity';
+import { dayOfWeekMapping } from 'src/enums/day-of-week.enum';
+import { AvailabilityEntity } from '../availability/availability.entity';
+import { parseTimeToUTC } from 'src/utils/date';
 
 @Injectable()
 export class AppointmentService {
@@ -18,20 +21,32 @@ export class AppointmentService {
   ) {}
 
   async create(reqBody: CreateAppointmentDto): Promise<ViewAppointmentDto> {
-    if (!this.verifyEntityExists(reqBody.doctorId, this.doctorRepository))
+    if (!(await this.verifyDoctorExists(reqBody.doctorId)))
       throw new HttpException('doctor does not exist', HttpStatus.BAD_REQUEST);
+
     const doctor = await this.doctorRepository.findOneBy({
       id: reqBody.doctorId,
     });
-    if (!this.verifyDateIsAvailable(reqBody.doctorId, reqBody.consultationDate))
+
+    if (
+      !(await this.verifyDateIsAvailable(
+        reqBody.doctorId,
+        new Date(reqBody.consultationDate),
+      ))
+    )
       throw new HttpException('date is not available', HttpStatus.BAD_REQUEST);
+
     const appointmentEntity: AppointmentEntity =
       this.appointmentRepository.create({
         ...reqBody,
+        consultationDate: new Date(reqBody.consultationDate).toISOString(),
         status: AppointmentStatus.SCHEDULED,
         price: doctor.appointmentPrice,
       });
-    return new ViewAppointmentDto(appointmentEntity);
+
+    return new ViewAppointmentDto(
+      await this.appointmentRepository.save(appointmentEntity),
+    );
   }
 
   async findById(reqId: number): Promise<ViewAppointmentDto> {
@@ -59,7 +74,7 @@ export class AppointmentService {
     reqId: number,
     reqBody: UpdateAppointmentDto,
   ): Promise<ViewAppointmentDto> {
-    if (!this.verifyEntityExists(reqId, this.appointmentRepository))
+    if (!this.verifyAppointmentExists(reqId))
       throw new HttpException(
         'appointment does not exist',
         HttpStatus.NOT_FOUND,
@@ -77,11 +92,14 @@ export class AppointmentService {
     return Object.assign(appointment, reqBody);
   }
 
-  async verifyEntityExists(
-    reqId: number,
-    repository: Repository<unknown>,
-  ): Promise<boolean> {
-    return !!(await repository.findOneBy({
+  async verifyDoctorExists(reqId: number): Promise<boolean> {
+    return !!(await this.doctorRepository.findOneBy({
+      id: reqId,
+    }));
+  }
+
+  async verifyAppointmentExists(reqId: number): Promise<boolean> {
+    return !!(await this.appointmentRepository.findOneBy({
       id: reqId,
     }));
   }
@@ -90,8 +108,39 @@ export class AppointmentService {
     const doctor: DoctorEntity = await this.doctorRepository.findOneBy({
       id: docId,
     });
-    return doctor.appointments.some(
-      (appointment) => (appointment.consultationDate = date),
+    const minimumInterval: number = 60 * 60 * 1000;
+    const consultationDateTime: number = date.getTime();
+    const consultationDayOfWeek: string = dayOfWeekMapping[date.getDay()];
+    const consultationTime: Date = parseTimeToUTC(
+      date.toISOString().slice(11, 19),
     );
+
+    const doctorSchedule: AvailabilityEntity =
+      doctor.availabilitySchedules.find(
+        (schedule) => schedule.dayOfWeek == consultationDayOfWeek,
+      );
+    const doctorStartTime: Date = parseTimeToUTC(
+      doctorSchedule.startTime.toString(),
+    );
+    const doctorEndTime: Date = parseTimeToUTC(
+      doctorSchedule.endTime.toString(),
+    );
+    const isWithinAvailability =
+      doctorStartTime <= consultationTime && doctorEndTime >= consultationTime;
+
+    if (!doctorSchedule) return false;
+    if (!isWithinAvailability) return false;
+    if (!doctor.appointments) return true;
+
+    return !doctor.appointments.some((appointment) => {
+      const existingAppointment: number = new Date(
+        appointment.consultationDate,
+      ).getTime();
+      const timeDifference: number = Math.abs(
+        existingAppointment - consultationDateTime,
+      );
+
+      return timeDifference < minimumInterval;
+    });
   }
 }
