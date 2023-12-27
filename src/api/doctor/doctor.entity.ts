@@ -85,6 +85,8 @@ export class DoctorEntity {
   )
   availabilitySchedules: AvailabilityEntity[];
 
-  @OneToMany(() => AppointmentEntity, (appoitment) => appoitment.doctor)
+  @OneToMany(() => AppointmentEntity, (appoitment) => appoitment.doctor, {
+    eager: true,
+  })
   appointments: AppointmentEntity[];
 }
